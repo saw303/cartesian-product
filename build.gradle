@@ -1,4 +1,5 @@
 apply plugin: 'java-library'
+apply plugin: 'groovy'
 
 sourceCompatibility = JavaVersion.VERSION_1_10
 
@@ -7,8 +8,8 @@ repositories {
 }
 
 dependencies {
-    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+    testCompile "org.codehaus.groovy:groovy-all:2.5.2"
+    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
 }
 
 ext.moduleName = 'io.wangler.cartesian'
@@ -25,26 +26,23 @@ compileJava {
 
 test {
 
-    useJUnitPlatform()
-
-    testLogging {
+    /*testLogging {
         events "passed", "skipped", "failed"
-    }
+    }*/
 
     reports {
         html.enabled = true
     }
 
     inputs.property("moduleName", moduleName)
-    doFirst {
+    /*doFirst {
         jvmArgs = [
                 '--module-path', classpath.asPath,
                 '--add-modules', 'ALL-MODULE-PATH',
-                '--add-reads', "$moduleName=org.junit.jupiter.api",
                 '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
         ]
         classpath = files()
-    }
+    }*/
 }
 
 jar {
