@@ -1,40 +1,68 @@
 apply plugin: 'java-library'
 apply plugin: 'groovy'
+apply plugin: "com.diffplug.gradle.spotless"
 
-sourceCompatibility = JavaVersion.VERSION_1_10
+// Upgrade to Java 10 when Groovy 2.5.3 gets released... (https://github.com/groovy/GMavenPlus/issues/104#issuecomment-417879173)
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:3.15.0"
+    }
+}
 
 repositories {
     jcenter()
 }
 
 dependencies {
-    testCompile "org.codehaus.groovy:groovy-all:2.5.2"
-    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
+
+    implementation 'org.slf4j:slf4j-api:1.7.25' 
+    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+    testImplementation "org.codehaus.groovy:groovy-all:2.5.2"
+    testImplementation "org.spockframework:spock-core:1.2-groovy-2.5"
 }
 
 ext.moduleName = 'io.wangler.cartesian'
 
+spotless {
+    java {
+
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            excludes = ['**/generated/**/*.*', '**/generated-sources/**/*.*', '**/wsdl2java/**/*.*']
+        }
+
+        googleJavaFormat()
+        licenseHeaderFile rootProject.file('LICENSE.txt'), "package "
+    }
+}
+
 compileJava {
     inputs.property("moduleName", moduleName)
-    doFirst {
+    /*doFirst {
         options.compilerArgs = [
                 '--module-path', classpath.asPath,
         ]
         classpath = files()
-    }
+    }*/
 }
 
 test {
+    
+    inputs.property("moduleName", moduleName)
 
-    /*testLogging {
+    testLogging {
         events "passed", "skipped", "failed"
-    }*/
+    }
 
     reports {
         html.enabled = true
     }
 
-    inputs.property("moduleName", moduleName)
     /*doFirst {
         jvmArgs = [
                 '--module-path', classpath.asPath,

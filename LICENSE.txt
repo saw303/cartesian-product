@@ -21,25 +21,3 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package io.wangler.cartesian;
-
-import java.util.List;
-
-/** @author Silvio Wangler */
-public class CartesianProduct {
-
-  private final List rows;
-
-  public CartesianProduct(List rows) {
-    if (rows == null) throw new IllegalArgumentException("rows must not be null");
-    this.rows = rows;
-  }
-
-  public int size() {
-    return rows.size();
-  }
-
-  public List rows(int i) {
-    return (List) this.rows.get(i);
-  }
-}
