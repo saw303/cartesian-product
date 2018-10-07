@@ -17,13 +17,13 @@ class SetsSpec extends Specification {
         setInputs.each { sets.add(it as Set) }
 
         expect:
-        sets.combinationSize() == expectedSize
+        sets.combinationProduct() == expectedSize
 
         where:
         setInputs                               || expectedSize
         []                                      || 0
-        ['A']                                   || 1
-        ['A', 'B']                              || 1
+        [['A']]                                 || 1
+        [['A', 'B']]                            || 2
         [['A', 'B'], [1]]                       || 2
         [['A', 'B'], [1, 2]]                    || 4
         [['A', 'B', 'C'], [1, 2]]               || 6

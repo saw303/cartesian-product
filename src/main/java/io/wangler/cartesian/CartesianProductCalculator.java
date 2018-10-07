@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
 
@@ -44,15 +43,9 @@ public class CartesianProductCalculator {
 
   public static CartesianProduct calculate(Sets context) {
 
-    List rows = new ArrayList(context.combinationSize());
+    List rows = new ArrayList(context.combinationProduct());
 
-    // Transform sets to lists to have them ordered
-    List<List> values =
-        context.getSets().stream().map(set -> new ArrayList(set)).collect(Collectors.toList());
-
-    values.forEach(list -> Collections.sort(list));
-
-    ofCombinations(values)
+    ofCombinations(context.getSets())
         .forEach(
             row -> {
               log.debug("{} contains {}", row.getClass().getCanonicalName(), row);

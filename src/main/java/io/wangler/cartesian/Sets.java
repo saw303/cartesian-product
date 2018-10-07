@@ -24,28 +24,50 @@
 package io.wangler.cartesian;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /** @author Silvio Wangler */
 public class Sets {
 
-  private List<Set> sets = new ArrayList<>();
+  private List<List> sets = new ArrayList<>();
 
   public void add(Set set) {
-    sets.add(set);
+    List list = new ArrayList<>(set);
+    Collections.sort(list);
+    sets.add(list);
   }
 
-  public List<Set> getSets() {
+  public <T> void add(Comparator<T> comparator, Set set) {
+    List list = new ArrayList<>(set);
+    Collections.sort(list, comparator);
+    sets.add(list);
+  }
+
+  public <T> void add(T... values) {
+    add(toSet(values));
+  }
+
+  public <T> void add(Comparator<T> comparator, T... values) {
+    add(comparator, toSet(values));
+  }
+
+  public List<List> getSets() {
     return Collections.unmodifiableList(this.sets);
   }
 
-  public int combinationSize() {
-
+  public int combinationProduct() {
     if (getSets().isEmpty()) {
       return 0;
     }
     return this.getSets().stream().map(s -> s.size()).reduce(1, (a, b) -> a * b);
+  }
+
+  private <T> HashSet toSet(T[] values) {
+    return new HashSet(Arrays.asList(values));
   }
 }
