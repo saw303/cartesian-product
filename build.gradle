@@ -60,7 +60,9 @@ test {
     }
 
     reports {
-        html.enabled = true
+        boolean isCI = System.getenv('CI') != null ? true: false
+        html.enabled = !isCI
+        junitXml.enabled = isCI
     }
 
     /*doFirst {
