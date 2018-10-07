@@ -21,28 +21,60 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package io.wangler.cartesian;
+package io.wangler.cartesian.internal;
 
+import io.wangler.cartesian.Sets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Represents a group of value sets.
- *
- * @author Silvio Wangler
- */
-public interface Sets {
+/** @author Silvio Wangler */
+public class SetsImpl implements Sets {
 
-  void add(Set set);
+  private List<List> sets = new ArrayList<>();
 
-  <T> void add(Comparator<T> comparator, Set set);
+  @Override
+  public void add(Set set) {
+    List list = new ArrayList<>(set);
+    Collections.sort(list);
+    sets.add(list);
+  }
 
-  <T> void add(T... values);
+  @Override
+  public <T> void add(Comparator<T> comparator, Set set) {
+    List list = new ArrayList<>(set);
+    Collections.sort(list, comparator);
+    sets.add(list);
+  }
 
-  <T> void add(Comparator<T> comparator, T... values);
+  @Override
+  public <T> void add(T... values) {
+    add(toSet(values));
+  }
 
-  List<List> getSets();
+  @Override
+  public <T> void add(Comparator<T> comparator, T... values) {
+    add(comparator, toSet(values));
+  }
 
-  int combinationProduct();
+  @Override
+  public List<List> getSets() {
+    return Collections.unmodifiableList(this.sets);
+  }
+
+  @Override
+  public int combinationProduct() {
+    if (getSets().isEmpty()) {
+      return 0;
+    }
+    return this.getSets().stream().map(s -> s.size()).reduce(1, (a, b) -> a * b);
+  }
+
+  private <T> HashSet toSet(T[] values) {
+    return new HashSet(Arrays.asList(values));
+  }
 }

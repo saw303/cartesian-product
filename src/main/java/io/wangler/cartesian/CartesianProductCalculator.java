@@ -25,6 +25,7 @@ package io.wangler.cartesian;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import io.wangler.cartesian.internal.CartesianProductImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -52,8 +53,7 @@ public class CartesianProductCalculator {
               rows.add(row);
             });
 
-    CartesianProduct cartesianProduct = new CartesianProduct(rows);
-    return cartesianProduct;
+    return new CartesianProductImpl(rows);
   }
 
   private static Stream<List> ofCombinations(List<List> collections) {

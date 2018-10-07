@@ -1,15 +1,15 @@
 package io.wangler.cartesian
 
-
+import io.wangler.cartesian.internal.SetsImpl
 import spock.lang.Specification
 
-/** @author Silvio Wangler    */
+/** @author Silvio Wangler     */
 class CartesianProductSpec extends Specification {
 
     void "Calculate a simple cartesian product using two small sets"() {
 
         given:
-        Sets sets = new Sets()
+        Sets sets = new SetsImpl()
 
         sets.add(["A", "B"] as Set)
         sets.add(1, 2)
@@ -21,16 +21,16 @@ class CartesianProductSpec extends Specification {
         product.size() == 4
 
         and:
-        ["A", 1] == product.rows(0)
-        ["A", 2] == product.rows(1)
-        ["B", 1] == product.rows(2)
-        ["B", 2] == product.rows(3)
+        ["A", 1] == product.row(0)
+        ["A", 2] == product.row(1)
+        ["B", 1] == product.row(2)
+        ["B", 2] == product.row(3)
     }
 
     void "Calculate a simple cartesian product using three small sets"() {
 
         given:
-        Sets sets = new Sets()
+        Sets sets = new SetsImpl()
 
         sets.add(["A", "B"] as Set)
         sets.add(1, 2)
@@ -48,28 +48,28 @@ class CartesianProductSpec extends Specification {
         product.size() == 16
 
         and:
-        ["A", 1, Locale.GERMAN] == product.rows(0)
-        ["A", 1, Locale.ENGLISH] == product.rows(1)
-        ["A", 1, Locale.FRENCH] == product.rows(2)
-        ["A", 1, Locale.ITALIAN] == product.rows(3)
-        ["A", 2, Locale.GERMAN] == product.rows(4)
-        ["A", 2, Locale.ENGLISH] == product.rows(5)
-        ["A", 2, Locale.FRENCH] == product.rows(6)
-        ["A", 2, Locale.ITALIAN] == product.rows(7)
-        ["B", 1, Locale.GERMAN] == product.rows(8)
-        ["B", 1, Locale.ENGLISH] == product.rows(9)
-        ["B", 1, Locale.FRENCH] == product.rows(10)
-        ["B", 1, Locale.ITALIAN] == product.rows(11)
-        ["B", 2, Locale.GERMAN] == product.rows(12)
-        ["B", 2, Locale.ENGLISH] == product.rows(13)
-        ["B", 2, Locale.FRENCH] == product.rows(14)
-        ["B", 2, Locale.ITALIAN] == product.rows(15)
+        ["A", 1, Locale.GERMAN] == product.row(0)
+        ["A", 1, Locale.ENGLISH] == product.row(1)
+        ["A", 1, Locale.FRENCH] == product.row(2)
+        ["A", 1, Locale.ITALIAN] == product.row(3)
+        ["A", 2, Locale.GERMAN] == product.row(4)
+        ["A", 2, Locale.ENGLISH] == product.row(5)
+        ["A", 2, Locale.FRENCH] == product.row(6)
+        ["A", 2, Locale.ITALIAN] == product.row(7)
+        ["B", 1, Locale.GERMAN] == product.row(8)
+        ["B", 1, Locale.ENGLISH] == product.row(9)
+        ["B", 1, Locale.FRENCH] == product.row(10)
+        ["B", 1, Locale.ITALIAN] == product.row(11)
+        ["B", 2, Locale.GERMAN] == product.row(12)
+        ["B", 2, Locale.ENGLISH] == product.row(13)
+        ["B", 2, Locale.FRENCH] == product.row(14)
+        ["B", 2, Locale.ITALIAN] == product.row(15)
     }
 
     void "Calculate a simple cartesian product using one small set"() {
 
         given:
-        Sets sets = new Sets()
+        Sets sets = new SetsImpl()
 
         sets.add(["A", "B", "C", "A", "D", "B", "Z"] as Set)
 
@@ -80,10 +80,31 @@ class CartesianProductSpec extends Specification {
         product.size() == 5
 
         and:
-        ["A"] == product.rows(0)
-        ["B"] == product.rows(1)
-        ["C"] == product.rows(2)
-        ["D"] == product.rows(3)
-        ["Z"] == product.rows(4)
+        ["A"] == product.row(0)
+        ["B"] == product.row(1)
+        ["C"] == product.row(2)
+        ["D"] == product.row(3)
+        ["Z"] == product.row(4)
+    }
+
+    void "Row access with invalid index causes an exception"() {
+
+        when:
+        given:
+        Sets sets = new SetsImpl()
+
+        sets.add(["A"] as Set)
+
+        and:
+        CartesianProduct product = CartesianProductCalculator.calculate(sets)
+
+        when:
+        product.row(index)
+
+        then:
+        thrown(IndexOutOfBoundsException)
+
+        where:
+        index << [-2, -1, 1, 2, 3]
     }
 }

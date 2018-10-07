@@ -21,31 +21,30 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package io.wangler.cartesian;
+package io.wangler.cartesian.internal;
 
+import static java.util.Collections.unmodifiableList;
+
+import io.wangler.cartesian.CartesianProduct;
 import java.util.List;
 
-/**
- * Represents a cartesian product.
- *
- * @author Silvio Wangler
- */
-public interface CartesianProduct {
+/** @author Silvio Wangler */
+public class CartesianProductImpl implements CartesianProduct {
 
-  /**
-   * The size of the cartesian products (Amount of table rows).
-   *
-   * @return the size of the cartesian product.
-   */
-  int size();
+  private final List rows;
 
-  /**
-   * Returns the table row of a that cartesian product.
-   *
-   * @param index index of the table row (zero based index).
-   * @return the corresponding table row values as an unmodifiable list.
-   * @throws IndexOutOfBoundsException if the index is smaller than 0 or larger than {@link
-   *     CartesianProduct#size()} - 1.
-   */
-  List row(int index);
+  public CartesianProductImpl(List rows) {
+    if (rows == null) throw new IllegalArgumentException("rows must not be null");
+    this.rows = rows;
+  }
+
+  @Override
+  public int size() {
+    return rows.size();
+  }
+
+  @Override
+  public List row(int i) {
+    return unmodifiableList((List) this.rows.get(i));
+  }
 }
