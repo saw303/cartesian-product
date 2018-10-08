@@ -26,7 +26,10 @@ package io.wangler.cartesian.internal;
 import static java.util.Collections.unmodifiableList;
 
 import io.wangler.cartesian.CartesianProduct;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 /** @author Silvio Wangler */
 public class CartesianProductImpl implements CartesianProduct {
@@ -46,5 +49,20 @@ public class CartesianProductImpl implements CartesianProduct {
   @Override
   public List row(int i) {
     return unmodifiableList((List) this.rows.get(i));
+  }
+
+  @Override
+  public Iterator iterator() {
+    return rows.iterator();
+  }
+
+  @Override
+  public void forEach(Consumer action) {
+    rows.forEach(action);
+  }
+
+  @Override
+  public Spliterator spliterator() {
+    return rows.spliterator();
   }
 }

@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author Silvio Wangler
  */
-public interface CartesianProduct {
+public interface CartesianProduct extends Iterable {
 
   /**
    * The size of the cartesian products (Amount of table rows).
