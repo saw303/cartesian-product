@@ -23,8 +23,6 @@
 */
 package io.wangler.cartesian;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 import io.wangler.cartesian.internal.CartesianProductImpl;
 import io.wangler.cartesian.internal.SetsImpl;
 import java.util.ArrayList;
@@ -33,11 +31,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @author Silvio Wangler */
 public class CartesianProductCalculator {
 
-  private static final Logger log = getLogger(CartesianProductCalculator.class);
+  private static final Logger log = LoggerFactory.getLogger(CartesianProductCalculator.class);
 
   private CartesianProductCalculator() {
     // cannot create this one using the constructor.
