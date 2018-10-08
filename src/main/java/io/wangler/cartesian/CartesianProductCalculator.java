@@ -26,6 +26,7 @@ package io.wangler.cartesian;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import io.wangler.cartesian.internal.CartesianProductImpl;
+import io.wangler.cartesian.internal.SetsImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,9 +45,11 @@ public class CartesianProductCalculator {
 
   public static CartesianProduct calculate(Sets context) {
 
-    List rows = new ArrayList(context.combinationProduct());
+    SetsImpl sets = (SetsImpl) context;
 
-    ofCombinations(context.getSets())
+    List rows = new ArrayList(sets.getCombinationProduct());
+
+    ofCombinations(sets.getSets())
         .forEach(
             row -> {
               log.debug("{} contains {}", row.getClass().getCanonicalName(), row);

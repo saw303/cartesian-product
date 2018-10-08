@@ -1,6 +1,6 @@
 package io.wangler.cartesian
 
-
+import io.wangler.cartesian.internal.SetsImpl
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -20,7 +20,10 @@ class SetsSpec extends Specification {
         Sets sets = builder.build()
 
         expect:
-        sets.combinationProduct() == expectedSize
+        sets.class == SetsImpl
+
+        and:
+        sets.combinationProduct == expectedSize
 
         where:
         setInputs                               || expectedSize

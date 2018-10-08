@@ -43,13 +43,11 @@ public class SetsImpl extends Sets {
     this.combinationProduct = combinationProduct;
   }
 
-  @Override
   public List<List> getSets() {
     return this.sets;
   }
 
-  @Override
-  public int combinationProduct() {
+  public int getCombinationProduct() {
     return this.combinationProduct;
   }
 

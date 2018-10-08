@@ -25,7 +25,6 @@ package io.wangler.cartesian;
 
 import io.wangler.cartesian.internal.SetsImpl;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,12 +34,13 @@ import java.util.Set;
  */
 public abstract class Sets {
 
-  public abstract List<List> getSets();
-
-  public abstract int combinationProduct();
-
   public abstract static class Builder {
 
+    /**
+     * Create a new instance of a builder.
+     *
+     * @return builder instance.
+     */
     public static Builder create() {
       return new SetsImpl.SetsBuilder();
     }
