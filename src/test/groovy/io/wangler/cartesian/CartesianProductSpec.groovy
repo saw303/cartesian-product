@@ -1,6 +1,6 @@
 package io.wangler.cartesian
 
-import io.wangler.cartesian.internal.SetsImpl
+
 import spock.lang.Specification
 
 /** @author Silvio Wangler     */
@@ -9,13 +9,13 @@ class CartesianProductSpec extends Specification {
     void "Calculate a simple cartesian product using two small sets"() {
 
         given:
-        Sets sets = new SetsImpl()
+        Sets.Builder builder = Sets.Builder.create()
 
-        sets.add(["A", "B"] as Set)
-        sets.add(1, 2)
+        builder.withSet(["A", "B"] as Set)
+        builder.withValues(1, 2)
 
         when:
-        CartesianProduct product = CartesianProductCalculator.calculate(sets)
+        CartesianProduct product = CartesianProductCalculator.calculate(builder.build())
 
         then:
         product.size() == 4
@@ -30,16 +30,16 @@ class CartesianProductSpec extends Specification {
     void "Calculate a simple cartesian product using three small sets"() {
 
         given:
-        Sets sets = new SetsImpl()
+        Sets.Builder builder = Sets.Builder.create()
 
-        sets.add(["A", "B"] as Set)
-        sets.add(1, 2)
-        sets.add(new Comparator<Locale>() {
+        builder.withSet(["A", "B"] as Set).withValues(1, 2).withValues(new Comparator<Locale>() {
             @Override
             int compare(Locale o1, Locale o2) {
                 return o1.toString().compareTo(o2.toString())
             }
         }, Locale.GERMAN, Locale.FRENCH, Locale.ITALIAN, Locale.ENGLISH)
+
+        Sets sets = builder.build()
 
         when:
         CartesianProduct product = CartesianProductCalculator.calculate(sets)
@@ -69,12 +69,12 @@ class CartesianProductSpec extends Specification {
     void "Calculate a simple cartesian product using one small set"() {
 
         given:
-        Sets sets = new SetsImpl()
+        Sets.Builder builder = Sets.Builder.create()
 
-        sets.add(["A", "B", "C", "A", "D", "B", "Z"] as Set)
+        builder.withSet(["A", "B", "C", "A", "D", "B", "Z"] as Set)
 
         when:
-        CartesianProduct product = CartesianProductCalculator.calculate(sets)
+        CartesianProduct product = CartesianProductCalculator.calculate(builder.build())
 
         then:
         product.size() == 5
@@ -89,14 +89,13 @@ class CartesianProductSpec extends Specification {
 
     void "Row access with invalid index causes an exception"() {
 
-        when:
         given:
-        Sets sets = new SetsImpl()
+        Sets.Builder builder = Sets.Builder.create()
 
-        sets.add(["A"] as Set)
+        builder.withSet(["A"] as Set)
 
         and:
-        CartesianProduct product = CartesianProductCalculator.calculate(sets)
+        CartesianProduct product = CartesianProductCalculator.calculate(builder.build())
 
         when:
         product.row(index)

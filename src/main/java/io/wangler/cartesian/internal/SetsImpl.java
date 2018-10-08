@@ -33,48 +33,72 @@ import java.util.List;
 import java.util.Set;
 
 /** @author Silvio Wangler */
-public class SetsImpl implements Sets {
+public class SetsImpl extends Sets {
 
-  private List<List> sets = new ArrayList<>();
+  private final List<List> sets;
+  private final int combinationProduct;
 
-  @Override
-  public void add(Set set) {
-    List list = new ArrayList<>(set);
-    Collections.sort(list);
-    sets.add(list);
-  }
-
-  @Override
-  public <T> void add(Comparator<T> comparator, Set set) {
-    List list = new ArrayList<>(set);
-    Collections.sort(list, comparator);
-    sets.add(list);
-  }
-
-  @Override
-  public <T> void add(T... values) {
-    add(toSet(values));
-  }
-
-  @Override
-  public <T> void add(Comparator<T> comparator, T... values) {
-    add(comparator, toSet(values));
+  SetsImpl(List<List> sets, int combinationProduct) {
+    this.sets = Collections.unmodifiableList(sets);
+    this.combinationProduct = combinationProduct;
   }
 
   @Override
   public List<List> getSets() {
-    return Collections.unmodifiableList(this.sets);
+    return this.sets;
   }
 
   @Override
   public int combinationProduct() {
-    if (getSets().isEmpty()) {
-      return 0;
-    }
-    return this.getSets().stream().map(s -> s.size()).reduce(1, (a, b) -> a * b);
+    return this.combinationProduct;
   }
 
-  private <T> HashSet toSet(T[] values) {
-    return new HashSet(Arrays.asList(values));
+  public static class SetsBuilder extends Sets.Builder {
+
+    private List<List> sets = new ArrayList<>();
+
+    @Override
+    public Builder withSet(Set set) {
+      List list = new ArrayList<>(set);
+      Collections.sort(list);
+      sets.add(list);
+      return this;
+    }
+
+    @Override
+    public Sets build() {
+      return new SetsImpl(this.sets, calculateCombinationProduct());
+    }
+
+    @Override
+    public Builder withValues(Comparator comparator, Object[] values) {
+      withSet(comparator, toSet(values));
+      return this;
+    }
+
+    @Override
+    public Builder withValues(Object[] values) {
+      withSet(toSet(values));
+      return this;
+    }
+
+    @Override
+    public Builder withSet(Comparator comparator, Set set) {
+      List list = new ArrayList<>(set);
+      Collections.sort(list, comparator);
+      sets.add(list);
+      return this;
+    }
+
+    private <T> HashSet toSet(T[] values) {
+      return new HashSet(Arrays.asList(values));
+    }
+
+    private int calculateCombinationProduct() {
+      if (this.sets.isEmpty()) {
+        return 0;
+      }
+      return this.sets.stream().map(s -> s.size()).reduce(1, (a, b) -> a * b);
+    }
   }
 }

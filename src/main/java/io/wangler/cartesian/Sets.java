@@ -23,6 +23,7 @@
 */
 package io.wangler.cartesian;
 
+import io.wangler.cartesian.internal.SetsImpl;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -32,17 +33,26 @@ import java.util.Set;
  *
  * @author Silvio Wangler
  */
-public interface Sets {
+public abstract class Sets {
 
-  void add(Set set);
+  public abstract List<List> getSets();
 
-  <T> void add(Comparator<T> comparator, Set set);
+  public abstract int combinationProduct();
 
-  <T> void add(T... values);
+  public abstract static class Builder {
 
-  <T> void add(Comparator<T> comparator, T... values);
+    public static Builder create() {
+      return new SetsImpl.SetsBuilder();
+    }
 
-  List<List> getSets();
+    public abstract Builder withSet(Set set);
 
-  int combinationProduct();
+    public abstract <T> Builder withSet(Comparator<T> comparator, Set set);
+
+    public abstract <T> Builder withValues(T... values);
+
+    public abstract <T> Builder withValues(Comparator<T> comparator, T... values);
+
+    public abstract Sets build();
+  }
 }
