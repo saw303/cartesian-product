@@ -36,19 +36,13 @@ import java.util.Set;
 public class SetsImpl extends Sets {
 
   private final List<List> sets;
-  private final int combinationProduct;
 
-  SetsImpl(List<List> sets, int combinationProduct) {
+  SetsImpl(List<List> sets) {
     this.sets = Collections.unmodifiableList(sets);
-    this.combinationProduct = combinationProduct;
   }
 
   public List<List> getSets() {
     return this.sets;
-  }
-
-  public int getCombinationProduct() {
-    return this.combinationProduct;
   }
 
   public static class SetsBuilder extends Sets.Builder {
@@ -65,7 +59,7 @@ public class SetsImpl extends Sets {
 
     @Override
     public Sets build() {
-      return new SetsImpl(this.sets, calculateCombinationProduct());
+      return new SetsImpl(this.sets);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.wangler.cartesian
 
-
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /** @author Silvio Wangler     */
@@ -105,5 +105,26 @@ class CartesianProductSpec extends Specification {
 
         where:
         index << [-2, -1, 1, 2, 3]
+    }
+
+    @Ignore
+    void "Create cartesian product for 6 alphanumeric characters"() {
+
+        given:
+        Sets.Builder builder = Sets.Builder.create()
+
+        Set<String> alphanumericChars = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] as Set
+        builder.withSet(alphanumericChars)
+                .withSet(alphanumericChars)
+                .withSet(alphanumericChars)
+                .withSet(alphanumericChars)
+                .withSet(alphanumericChars)
+                .withSet(alphanumericChars)
+
+        when:
+        CartesianProduct product = CartesianProductCalculator.calculate(builder.build())
+
+        then:
+        product.size() == 5
     }
 }

@@ -28,6 +28,7 @@ import io.wangler.cartesian.internal.SetsImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
@@ -46,12 +47,13 @@ public class CartesianProductCalculator {
 
     SetsImpl sets = (SetsImpl) context;
 
-    List rows = new ArrayList(sets.getCombinationProduct());
+    List rows = new LinkedList();
 
     ofCombinations(sets.getSets())
         .forEach(
             row -> {
               log.debug("{} contains {}", row.getClass().getCanonicalName(), row);
+
               rows.add(row);
             });
 
